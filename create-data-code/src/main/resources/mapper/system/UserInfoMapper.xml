@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yangxueyong.create.data.mapper.system.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.yangxueyong.create.data.entity.system.UserInfo">
+    <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="USER_NAME" jdbcType="VARCHAR" property="userName" />
+    <result column="WX_OPENID" jdbcType="VARCHAR" property="wxOpenId" />
+    <result column="WX_NICK_NAME" jdbcType="VARCHAR" property="wxNickName" />
+    <result column="WX_HEADER_IMG" jdbcType="VARCHAR" property="wxHeaderImg" />
+    <result column="PHONE_NUM" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="ID_CARD" jdbcType="VARCHAR" property="idCard" />
+    <result column="CREATE_USER_NO" jdbcType="VARCHAR" property="createUserNo" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="MAINTENANCE_USER_NO" jdbcType="VARCHAR" property="maintenanceUserNo" />
+    <result column="MAINTENANCE_TIME" jdbcType="VARCHAR" property="maintenanceTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    USER_ID, USER_NAME, WX_OPENID, WX_NICK_NAME, WX_HEADER_IMG, PHONE_NUM, CREATE_USER_NO, 
+    CREATE_TIME, MAINTENANCE_USER_NO, MAINTENANCE_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_P_USER_INFO
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByWXOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_P_USER_INFO
+    where WX_OPENID = #{wxOpenId,jdbcType=VARCHAR} and rownum &lt;=1
+  </select>
+
+  <select id="selectByPhone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_P_USER_INFO
+    where PHONE_NUM = #{phoneNum,jdbcType=VARCHAR} and rownum &lt;=1
+  </select>
+
+  <select id="selectByUser" parameterType="com.yangxueyong.create.data.entity.system.io.UserInfoIO" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from T_P_USER_INFO
+    <where>
+      <if test="phoneNum != null">
+        and PHONE_NUM = #{phoneNum,jdbcType=VARCHAR}
+      </if>
+      <if test="idCard != null">
+        and instr(ID_CARD,#{idCard,jdbcType=VARCHAR}) &gt; 0
+      </if>
+      and rownum &lt;=1
+    </where>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from T_P_USER_INFO
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.yangxueyong.create.data.entity.system.UserInfo">
+    insert into T_P_USER_INFO (USER_ID, USER_NAME, WX_OPENID, 
+      WX_NICK_NAME, WX_HEADER_IMG, PHONE_NUM, 
+      CREATE_USER_NO, CREATE_TIME, MAINTENANCE_USER_NO, 
+      MAINTENANCE_TIME)
+    values (#{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{wxOpenId,jdbcType=VARCHAR}, 
+      #{wxNickName,jdbcType=VARCHAR}, #{wxHeaderImg,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, 
+      #{createUserNo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{maintenanceUserNo,jdbcType=VARCHAR}, 
+      #{maintenanceTime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yangxueyong.create.data.entity.system.UserInfo">
+    insert into T_P_USER_INFO
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="userName != null">
+        USER_NAME,
+      </if>
+      <if test="wxOpenId != null">
+        WX_OPENID,
+      </if>
+      <if test="wxNickName != null">
+        WX_NICK_NAME,
+      </if>
+      <if test="wxHeaderImg != null">
+        WX_HEADER_IMG,
+      </if>
+      <if test="phoneNum != null">
+        PHONE_NUM,
+      </if>
+      <if test="createUserNo != null">
+        CREATE_USER_NO,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="maintenanceUserNo != null">
+        MAINTENANCE_USER_NO,
+      </if>
+      <if test="maintenanceTime != null">
+        MAINTENANCE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenId != null">
+        #{wxOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null">
+        #{wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxHeaderImg != null">
+        #{wxHeaderImg,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserNo != null">
+        #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintenanceUserNo != null">
+        #{maintenanceUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceTime != null">
+        #{maintenanceTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yangxueyong.create.data.entity.system.UserInfo">
+    update T_P_USER_INFO
+    <set>
+      <if test="userName != null">
+        USER_NAME = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxOpenId != null">
+        WX_OPENID = #{wxOpenId,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null">
+        WX_NICK_NAME = #{wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxHeaderImg != null">
+        WX_HEADER_IMG = #{wxHeaderImg,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNum != null">
+        PHONE_NUM = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+      <if test="createUserNo != null">
+        CREATE_USER_NO = #{createUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maintenanceUserNo != null">
+        MAINTENANCE_USER_NO = #{maintenanceUserNo,jdbcType=VARCHAR},
+      </if>
+      <if test="maintenanceTime != null">
+        MAINTENANCE_TIME = #{maintenanceTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="byWhat == 'userId'">
+      where USER_ID = #{userId,jdbcType=VARCHAR}
+    </if>
+    <if test="byWhat == 'wxOpenId'">
+      where WX_OPENID = #{wxOpenId,jdbcType=VARCHAR}
+    </if>
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yangxueyong.create.data.entity.system.UserInfo">
+    update T_P_USER_INFO
+    set USER_NAME = #{userName,jdbcType=VARCHAR},
+      WX_OPENID = #{wxOpenId,jdbcType=VARCHAR},
+      WX_NICK_NAME = #{wxNickName,jdbcType=VARCHAR},
+      WX_HEADER_IMG = #{wxHeaderImg,jdbcType=VARCHAR},
+      PHONE_NUM = #{phoneNum,jdbcType=VARCHAR},
+      CREATE_USER_NO = #{createUserNo,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      MAINTENANCE_USER_NO = #{maintenanceUserNo,jdbcType=VARCHAR},
+      MAINTENANCE_TIME = #{maintenanceTime,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+</mapper>
